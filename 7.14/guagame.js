@@ -29,7 +29,7 @@ var GuaGame = function(fps, images, runCallback) {
     // timer
     window.fps = 30
     var runloop = function() {
-        log(window.fps)
+        // log(window.fps)
         // events
         var actions = Object.keys(g.actions)
         for (var i = 0; i < actions.length; i++) {
@@ -51,14 +51,35 @@ var GuaGame = function(fps, images, runCallback) {
         }, 1000/window.fps)
     }
 
-    //
+    g.imageByName = function(name) {
+        log('image by name', g.images)
+        var img = g.images[name]
+        var image = {
+            w: img.width,
+            h: img.height,
+            image: img,
+        }
+        return image
+    }
+    g.run = function() {
+        runCallback()
+        // 开始运行程序
+        setTimeout(function(){
+            runloop()
+        }, 1000/fps)
+    }
+// 程序入口
     var loads = []
     // 预先载入所有图片
     var names = Object.keys(images)
     for (var i = 0; i < names.length; i++) {
-        let name = names[i]
+        // 必须要用let,否则无法获取到ball图片,
+        // 图片的加载不能是同步
+        var name = names[i]
         var path = images[name]
-        let img = new Image()
+        // 必须要用let,只能获取到最后一张图片
+        var img = new Image()
+        log("name:::", i, name, img)
         img.src = path
         img.onload = function() {
             // 存入 g.images 中
@@ -72,23 +93,5 @@ var GuaGame = function(fps, images, runCallback) {
             }
         }
     }
-    g.imageByName = function(name) {
-        log('image by name', g.images)
-        var img = g.images[name]
-        var image = {
-            w: img.width,
-            h: img.height,
-            image: img,
-        }
-        return image
-    }
-    g.run = function() {
-        runCallback(g)
-        // 开始运行程序
-        setTimeout(function(){
-            runloop()
-        }, 1000/fps)
-    }
-
     return g
 }

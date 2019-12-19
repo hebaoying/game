@@ -40,7 +40,7 @@ var __main = function() {
         block: 'block.png',
         paddle: 'paddle.png',
     }
-    var game = GuaGame(30, images, function(g){
+    var game = GuaGame(30, images, function(){
         var paddle = Paddle(game)
         var ball = Ball(game)
 
