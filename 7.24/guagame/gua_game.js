@@ -75,6 +75,17 @@ class GuaGame {
         }
         return image
     }
+    textureByName(name) {
+        var g = this
+        log('texture by name', g.images)
+        var img = g.images[name]
+        // var image = {
+        //     w: img.width,
+        //     h: img.height,
+        //     image: img,
+        // }
+        return img
+    }
     runWithScene(scene) {
         var g = this
         g.scene = scene
