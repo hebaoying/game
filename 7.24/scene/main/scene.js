@@ -7,11 +7,10 @@ class Scene extends GuaScene {
     setup() {
         var game = this.game
         // 初始化
-        var background = game.textureByName('background')
-        var player = game.textureByName('player')
-
-        this.addElement(background)
-        this.addElement(player)
+        this.bg = GuaImage.new(game, 'background')
+        this.player = GuaImage.new(game, 'player')
+        this.addElement(this.bg)
+        this.addElement(this.player)
         // game.registerAction('a', function(){
         //     this.paddle.moveLeft()
         // })
@@ -22,7 +21,11 @@ class Scene extends GuaScene {
         //     this.ball.fire()
         // })
     }
+    // draw() {
+    //     this.game.drawImage(this.bg)
+    // }
     update() {
+        this.bg.y -= 1
 
     }
 }

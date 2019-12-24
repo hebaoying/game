@@ -27,7 +27,8 @@ class GuaGame {
         return this.i
     }
     drawImage(img) {
-        this.context.drawImage(img.image, img.x, img.y)
+        // img 是一个 guaImage
+        this.context.drawImage(img.texture, img.x, img.y)
     }
     // update
     update() {
