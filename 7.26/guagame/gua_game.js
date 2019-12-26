@@ -78,7 +78,7 @@ class GuaGame {
     }
     textureByName(name) {
         var g = this
-        log('texture by name', g.images)
+        // log('texture by name', g.images)
         var img = g.images[name]
         // var image = {
         //     w: img.width,

@@ -1,10 +1,28 @@
 var config = {
-    player_speed: 5,
-    bullet_speed: 5,
-    enemy_speed_range: [2, 5],
-    enemy_number: 10,
-    cloud_speed: 2,
-    fire_cool_down: 9,
+    player_speed: {
+        value: 5,
+        range: [1, 100],
+    },
+    bullet_speed: {
+        value: 5,
+        range: [1, 100],
+    },
+    enemy_speed: {
+        value: 1,
+        range: [1, 5],
+    },
+    enemy_number: {
+        value: 10,
+        range: [3, 20],
+    },
+    cloud_speed: {
+        value: 2,
+        range: [1, 10],
+    },
+    fire_cool_down: {
+        value: 9,
+        range: [5, 30],
+    },
 }
 
 class Bullet extends GuaImage{
@@ -47,7 +65,7 @@ class Play extends GuaImage{
         game.registerAction('s', function(){
             self.moveDown()
         })
-        game.registerAction('f', function(){
+        game.registerAction('j', function(){
             self.fire()
         })
     }
@@ -63,6 +81,7 @@ class Play extends GuaImage{
         }
     }
     moveLeft() {
+        log('dudududu')
         this.x -= this.speed
     }
     moveRight() {
@@ -108,7 +127,7 @@ class Enemy extends GuaImage{
         this.setup()
     }
     setup() {
-        var [start, end] = config.enemy_speed_range
+        var [start, end] = config.enemy_speed.range
         this.speed = randomBetween(start, end)
         this.x = randomBetween(0, 300)
         this.y = randomBetween(0, 100)
@@ -140,7 +159,8 @@ class Scene extends GuaScene {
         this.addElement(this.player)
 
         var es = []
-        for (let i = 0; i < config.enemy_number; i++) {
+        var enemyNumber = config.enemy_number.value
+        for (let i = 0; i < enemyNumber; i++) {
             let e = Enemy.new(game)
             es.push(e)
             this.addElement(e)
