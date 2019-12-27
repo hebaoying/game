@@ -66,9 +66,9 @@ class Play extends GuaImage{
     moveDown() {
         this.y += this.speed
     }
-    draw() {
-
-    }
+    // draw() {
+    //
+    // }
     update() {
         this.speed = config.player_speed.value
         if (this.coolDown > 0) {

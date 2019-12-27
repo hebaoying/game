@@ -1,60 +1,67 @@
 var config = {
     player_speed: {
+        name: '玩家速度',
         enable: true,
         value: 5,
         range: [1, 100],
     },
     bullet_speed: {
+        name: '子弹速度',
         enable: true,
         value: 5,
         range: [1, 100],
     },
     enemy_speed: {
+        name: '敌机速度',
         enable: true,
         value: 1,
         range: [1, 5],
     },
     enemy_number: {
+        name: '敌人数量',
         enable: false,
         value: 10,
         range: [3, 20],
     },
     cloud_speed: {
+        name: '云朵速度',
         enable: true,
         value: 2,
         range: [1, 10],
     },
     fire_cool_down: {
+        name: '子弹冷却时间',
         enable: true,
         value: 9,
         range: [5, 30],
     },
 }
 var initTemplate = function () {
-    let configContainer = e('.config-div')
+    let configConntainer = e('.config-div')
     let controls = Object.keys(config)
     for (let i = 0; i < controls.length; i++) {
-        let name = controls[i]
-        if (!config[name].enable) {
+        let n = controls[i]
+        if (!config[n].enable) {
             continue
         }
-        let value = config[name].value
-        let [min, max] = config[name].range
+        let name = config[n].name
+        let value = config[n].value
+        let [min, max] = config[n].range
         let t = `
             <label>
                 <input 
                     type="range" 
                     class="gua-auto-slider"
-                    id="id_${name}"
+                    id="id_${n}"
                     value="${value}"
-                    data-value="config.${name}.value"
+                    data-value="config.${n}.value"
                     max="${max}" 
                     min="${min}">
                     ${name}：<span class="gua-label"></span>
             </label>
             <br>
         `
-        configContainer.insertAdjacentHTML('beforeend', t)
+        configConntainer.insertAdjacentHTML('beforeend', t)
     }
     displayTags()
 }
