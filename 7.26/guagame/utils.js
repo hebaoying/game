@@ -1,14 +1,18 @@
-var e = sel => document.querySelector(sel)
+const e = sel => document.querySelector(sel)
 
-var log = console.log.bind(console)
+var es = function(selector) {
+    var elements = document.querySelectorAll(selector)
+    return elements
+}
+const log = console.log.bind(console)
 
-var imageFromPath = function(path) {
+const imageFromPath = function(path) {
     var img = new Image()
     img.src = path
     return img
 }
 
-var rectIntersects = function(a, b) {
+const rectIntersects = function(a, b) {
     var o = a
     if (b.y > o.y && b.y < o.y + o.image.height) {
         if (b.x > o.x && b.x < o.x + o.image.width) {
@@ -17,6 +21,28 @@ var rectIntersects = function(a, b) {
     }
     return false
 }
+var bindEvent = function (element, eventName, callback) {
+    element.addEventListener(eventName, callback)
+}
+
+var bindAll = function (selector, eventName, callback) {
+    var elements = document.querySelectorAll(selector)
+    for (var i = 0; i < elements.length; i++) {
+        var e = elements[i]
+        bindEvent(e, eventName, function (event) {
+            callback(event)
+        })
+    }
+}
+// const bindAll = function(sel, eventName, callback) {
+//     var l = es(sel)
+//     for (var i = 0; i < l.length; i++) {
+//         var tag = l[i]
+//         tag.addEventListener(eventName, function (event) {
+//             callback(event)
+//         })
+//     }
+// }
 const randomBetween = function(start, end) {
     var n = Math.random()
     var r = end - start

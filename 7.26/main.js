@@ -26,11 +26,19 @@ var enableDebugMode = function(game, enable) {
         }
     })
     // 控制速度
-    document.querySelector('#id-input-speed').addEventListener('input', function(event) {
-        var input = event.target
-        // log(event, input.value)
-        window.fps = Number(input.value)
-    })
+    // let controls = Object.keys(config)
+    // for (let i = 0; i < controls; i++) {
+    //     let name = controls[i]
+    //     let selector = "#id" + name
+    //     let value = config[name].value
+    //     document.querySelector(selector).addEventListener('input', function(event) {
+    //         var input = event.target
+    //         // log(event, input.value)
+    //         config[name].value = Number(input.value)
+    //         // window.fps = Number(input.value)
+    //     })
+    // }
+
 }
 
 var __main = function() {

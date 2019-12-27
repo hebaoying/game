@@ -31,9 +31,10 @@ class Bullet extends GuaImage{
         this.setup()
     }
     setup() {
-        this.speed = config.bullet_speed
+        this.speed = config.bullet_speed.value
     }
     update() {
+        this.setup()
         this.y -= this.speed
     }
 }
@@ -45,10 +46,10 @@ class Play extends GuaImage{
         this.setupInputs()
     }
     setup() {
-        this.speed = config.player_speed
+        this.speed = config.player_speed.value
         this.x = 100
         this.y = 400
-        this.coolDown = config.fire_cool_down
+        this.coolDown = config.fire_cool_down.value
     }
     setupInputs() {
         var self = this
@@ -71,7 +72,7 @@ class Play extends GuaImage{
     }
     fire() {
         if (this.coolDown == 0) {
-            this.coolDown = config.fire_cool_down
+            this.coolDown = config.fire_cool_down.value
             var x = this.x + this.w / 2
             var y = this.y
             var b = Bullet.new(this.game)
@@ -81,7 +82,6 @@ class Play extends GuaImage{
         }
     }
     moveLeft() {
-        log('dudududu')
         this.x -= this.speed
     }
     moveRight() {
@@ -97,6 +97,7 @@ class Play extends GuaImage{
 
     }
     update() {
+        this.speed = config.player_speed.value
         if (this.coolDown > 0) {
             this.coolDown--
         }
@@ -109,9 +110,10 @@ class Cloud extends GuaImage{
         this.setup()
     }
     setup() {
-        this.speed = config.cloud_speed
+        this.speed = config.cloud_speed.value
     }
     update() {
+        this.setup()
         this.y += this.speed
         if (this.y > 500) {
             this.setup()
