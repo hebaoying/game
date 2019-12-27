@@ -141,6 +141,9 @@ class Scene extends GuaScene {
             this.addElement(e)
         }
         this.enemies = es
+
+        var ps = GuaParticleSystem.new(game)
+        this.addElement(ps)
     }
     // draw() {
     //     this.game.drawImage(this.bg)

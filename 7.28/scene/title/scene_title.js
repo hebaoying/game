@@ -15,6 +15,7 @@ class GuaLabel {
     }
 }
 
+
 class SceneTitle extends GuaScene {
     constructor(game) {
         super(game)
@@ -25,6 +26,9 @@ class SceneTitle extends GuaScene {
         var text = '按 k 开始游戏'
         var label = GuaLabel.new(game, text)
         this.addElement(label)
+
+        var ps = GuaParticleSystem.new(game)
+        this.addElement(ps)
     }
     draw() {
         super.draw()

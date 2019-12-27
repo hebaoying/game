@@ -35,6 +35,32 @@ var config = {
         value: 9,
         range: [5, 30],
     },
+    fire_speed_factor: {
+        name: '爆炸加速度',
+        enable: false,
+        value: 0.01,
+    },
+    fire_speed: {
+        name: '爆炸速度',
+        enable: true,
+        value: 2,
+        range: [1, 30],
+    },
+    particles_number: {
+        name: '火花数量',
+        enable: false,
+        value: 60,
+    },
+    fire_duration: {
+        name: '爆炸停留时间',
+        enable: false,
+        value: 20,
+    },
+    fire_life: {
+        name: '爆炸范围',
+        enable: false,
+        value: 10,
+    },
 }
 var initTemplate = function () {
     let configConntainer = e('.config-div')
