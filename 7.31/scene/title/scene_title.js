@@ -26,6 +26,13 @@ class SceneTitle extends GuaScene {
         var text = '按 k 开始游戏'
         var label = GuaLabel.new(game, text)
         this.addElement(label)
+
+        // var ps = GuaParticleSystem.new(game)
+        // this.addElement(ps)
+        var w = GuaAnimation.new(game)
+        w.x = 100
+        w.y = 200
+        this.addElement(w)
     }
     draw() {
         super.draw()
