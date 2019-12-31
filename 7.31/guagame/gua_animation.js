@@ -8,81 +8,84 @@ class GuaAnimation {
         var i = new this(game)
         return i
     }
+    frames() {
+        return this.animations[this.animationName]
+    }
     setup() {
         // 为了省事, 在这里hard code一套动画
-        // this.animations = {
-        //     walk: [],
-        //     bird: [],
-        //     idle: [],
-        //     run: [],
-        // }
-        this.speed = config.player_speed.value
-        this.frames = []
-        // 这里的下标错了, debug 很久
-        for (let i = 1; i < 6; i++) {
-            let t = arguments[i]
-            let name = 'run' + (i + 1)
-            let img = this.game.textureByName(name)
-            this.frames.push(img)
+        this.animations = {
+            walk: [],
+            bird: [],
+            idle: [],
+            run: [],
         }
-        this.texture = this.frames[0]
+        this.speed = config.player_speed.value
+        // 这里的下标错了, debug 很久
+        for (let i = 1; i < 7; i++) {
+            let name = 'run' + i
+            let img = this.game.textureByName(name)
+            this.animations.run.push(img)
+        }
+        for (let i = 1; i < 10; i++) {
+            let name = 'idle' + i
+            // log('name:', name)
+            let img = this.game.textureByName(name)
+            this.animations.idle.push(img)
+        }
+        this.animationName = 'idle'
+        this.texture = this.frames()[0]
         this.frameIndex = 0
         this.frameCount = 3
         this.w = this.texture.width
         this.h = this.texture.height
+        this.flipX = false
     }
     setupInputs() {
         var self = this
         var game = this.game
-        game.registerAction('a', function(){
-            self.moveLeft()
+        game.registerAction('a', function(keyStatus){
+            self.move(-self.speed, keyStatus)
+            // self.moveLeft()
         })
-        game.registerAction('d', function(){
-            self.moveRight()
+        game.registerAction('d', function(keyStatus){
+            self.move(self.speed, keyStatus)
+            // self.move()
         })
-        game.registerAction('w', function(){
-            self.moveUp()
-        })
-        game.registerAction('s', function(){
-            self.moveDown()
-        })
-        game.registerAction('j', function(){
-            self.fire()
-        })
+        // game.registerAction('w', function(){
+        //     self.moveUp()
+        // })
     }
     draw() {
-        this.game.drawImage(this)
+        var context = this.game.context
+        if (this.flipX) {
+            context.save()
+            var x = this.x + this.w / 2
+            context.translate(x, 0)
+            context.scale(-1, 1)
+            context.translate(-x, 0)
+
+            context.drawImage(this.texture, this.x, this.y)
+            context.restore()
+        } else {
+            this.game.drawImage(this)
+        }
     }
     update() {
         this.frameCount--
         if (this.frameCount == 0) {
             this.frameCount = 3
-            this.frameIndex = (this.frameIndex + 1) % this.frames.length
-            this.texture = this.frames[this.frameIndex]
+            this.frameIndex = (this.frameIndex + 1) % this.frames().length
+            this.texture = this.frames()[this.frameIndex]
         }
-    }
-    moveLeft() {
-        this.x -= this.speed
-    }
-    moveRight() {
-        this.x += this.speed
-    }
-    moveUp() {
-        this.y -= this.speed
-    }
-    moveDown() {
-        this.y += this.speed
     }
     move(x, keyStatus) {
+        this.flipX = x < 0
         this.x += x
-        this.flipx = x < 0
         // log("keyStatus", keyStatus, "this.flipx", this.flipx)
-
         var animationNames = {
-            down: 'bird',
-            up: 'bird',
+            down: 'run',
+            up: 'idle',
         }
-
         var name = animationNames[keyStatus]
         this.changeAnimation(name)
         // if (keyStatus == 'down') {
@@ -90,7 +93,6 @@ class GuaAnimation {
         //     this.changeAnimation('idle')
         // }
     }
-
     changeAnimation(name) {
         this.animationName = name
     }
