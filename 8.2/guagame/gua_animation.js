@@ -51,9 +51,7 @@ class GuaAnimation {
             self.move(self.speed, keyStatus)
             // self.move()
         })
-        // game.registerAction('w', function(){
-        //     self.moveUp()
-        // })
+
     }
     draw() {
         var context = this.game.context
@@ -88,10 +86,6 @@ class GuaAnimation {
         }
         var name = animationNames[keyStatus]
         this.changeAnimation(name)
-        // if (keyStatus == 'down') {
-        // } else if(keyStatus == 'up') {
-        //     this.changeAnimation('idle')
-        // }
     }
     changeAnimation(name) {
         this.animationName = name
