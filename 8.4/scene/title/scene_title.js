@@ -28,7 +28,6 @@ class Pipes {
         this.pipe_number = config.pipe_number.value
         this.pipe_horizontal_space = config.pipe_horizontal_space.value
         this.pipe_vertical_gap = config.pipe_vertical_gap.value
-        this.backforward_speed = config.backforward_speed.value
         for (let i = 0; i < this.pipe_number; i++) {
             var p1 = GuaImage.new(this.game, 'pipe')
             p1.x = 10 + this.pipe_horizontal_space * i
@@ -48,22 +47,8 @@ class Pipes {
     }
     debug() {
         this.pipe_number = config.pipe_number.value
-        this.pipe_horizontal_space = config.pipe_horizontal_space.value
+        // this.pipe_horizontal_space = config.pipe_horizontal_space.value
         this.pipe_vertical_gap = config.pipe_vertical_gap.value
-        // for (var i = 0; i < this.pipes.length / 2 ; i += 2) {
-        //     var p1 = this.pipes[i]
-        //     var p2 = this.pipes[i + 1]
-        //     p1.x -= 5
-        //     p2.x -= 5
-        //     if(p1.x < this.offset) {
-        //         p1.x += this.pipe_number * this.pipe_horizontal_space
-        //         // this.resetPipePosition()
-        //     }
-        //     if(p2.x < this.offset) {
-        //         p2.x += this.pipe_number * this.pipe_horizontal_space
-        //         this.resetPipePosition(p1, p2)
-        //     }
-        // }
     }
     resetPipePosition(p1, p2) {
         p1.y = randomBetween(-100, 0)
@@ -71,31 +56,28 @@ class Pipes {
 
     }
     update() {
-        var startX = 0
-        var s = this.backforward_speed
-        for (var i = 0; i < this.pipes.length / 2 ; i += 2) {
-            var p1 = this.pipes[i]
-            var p2 = this.pipes[i + 1]
-            // let p = this.pipes[i]
-            p1.x += this.backforward_speed
-            p2.x += this.backforward_speed
-            // if (p.x < -this.pipe_horizontal_space) {
-            //     // log('水平间隔', p.x, this.pipe_horizontal_space, this.pipe_number)
-            //     if (i == 0) {
-            //         p.x += this.pipe_horizontal_space * this.pipe_number
-            //     } else {
-            //         p.x += startX + this.pipe_horizontal_space * i
-            //     }
-            //     // log('水平间隔 after', p.x, this.pipe_horizontal_space, this.pipe_number)
-            // }
-                if(p1.x < this.offset) {
-                    p1.x += this.pipe_number * this.pipe_horizontal_space
-                    // this.resetPipePosition()
-                }
-                if(p2.x < this.offset) {
-                    p2.x += this.pipe_number * this.pipe_horizontal_space
-                    this.resetPipePosition(p1, p2)
-                }
+        var startX
+        var s = config.backforward_speed.value
+        var space = config.pipe_horizontal_space.value
+        for (var i = 0; i < this.pipe_number ; i++) {
+            var p1 = this.pipes[i * 2]
+            var p2 = this.pipes[i * 2 + 1]
+            p1.x += s
+            p2.x += s
+            if(p1.x < -space) {
+                    // if (i === 0) {
+                    //     old_space = this.pipe_horizontal_space
+                    // }
+                    // if (old_space !== space && i !== 0) {
+                    //     var space_minus = space - old_space
+                    //     p1.x += this.pipe_number * space + space_minus
+                    //     p2.x += th is.pipe_number * space + space_minus
+                    // } else {
+                    p1.x += this.pipe_number * space
+                    p2.x += this.pipe_number * space
+                    // }
+                this.resetPipePosition(p1, p2)
+            }
         }
     }
     draw() {
@@ -130,7 +112,6 @@ class Grounds{
     setup() {
         this.number = 30
         this.grounds = []
-        this.offset = config.backforward_speed.value
         this.skipCount = 5
         for (let i = 0; i < this.number; i++) {
             var g = GuaImage.new(this.game, 'ground')
@@ -141,7 +122,7 @@ class Grounds{
     }
     update() {
         this.skipCount--
-        var offset = this.offset
+        var offset = config.backforward_speed.value
         if (this.skipCount == 0) {
             this.skipCount = 4
             offset = offset * 3 * -1

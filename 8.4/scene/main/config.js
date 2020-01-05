@@ -14,20 +14,20 @@ var config = {
     pipe_horizontal_space: {
         name: '水管水平间隔距离',
         enable: true,
-        value: 40,
+        value: 70,
         range: [1, 300],
     },
     pipe_number: {
         name: '水管数量',
-        enable: true,
-        value: 3,
+        enable: false,
+        value: 4,
         range: [1, 5],
     },
     backforward_speed: {
         name: '地面和水管后退速度',
-        enable: false,
+        enable: true,
         value: -4,
-        range: [-20, 20],
+        range: [-100, 0],
     },
     // cloud_speed: {
     //     name: '云朵速度',
