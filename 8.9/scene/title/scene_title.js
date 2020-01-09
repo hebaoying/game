@@ -1,106 +1,3 @@
-class GuaLabel {
-    constructor(game, text) {
-        this.game = game
-        this.text = text
-    }
-    static new(game, text) {
-        var i = new this(game, text)
-        return i
-    }
-    draw() {
-        this.game.context.fillText(this.text, 100, 190)
-    }
-    update() {
-
-    }
-}
-
-class Pipes {
-    constructor(game) {
-        this.game = game
-        this.setup()
-    }
-    static new(game) {
-        var i = new this(game)
-        return i
-    }
-    setup() {
-        this.pipes = []
-        this.pipe_number = config.pipe_number.value
-        this.pipe_horizontal_space = config.pipe_horizontal_space.value
-        this.pipe_vertical_gap = config.pipe_vertical_gap.value
-        for (let i = 0; i < this.pipe_number; i++) {
-            var p1 = GuaImage.new(this.game, 'pipe')
-            p1.x = 10 + this.pipe_horizontal_space * i
-            p1.flipX = true
-            p1.flipY = true
-            var p2 = GuaImage.new(this.game, 'pipe')
-            p2.x = p1.x
-            p2.flipX = false
-            p2.flipY = false
-            this.resetPipePosition(p1, p2)
-            p1.h = 162
-            p2.h = 162
-            p2.roatation = 180
-            this.pipes.push(p1)
-            this.pipes.push(p2)
-        }
-    }
-    debug() {
-        this.pipe_number = config.pipe_number.value
-        // this.pipe_horizontal_space = config.pipe_horizontal_space.value
-        this.pipe_vertical_gap = config.pipe_vertical_gap.value
-    }
-    resetPipePosition(p1, p2) {
-        p1.y = randomBetween(-100, 0)
-        p2.y = p1.y + p1.h + this.pipe_vertical_gap
-
-    }
-    update() {
-        var startX
-        var s = config.backforward_speed.value
-        var space = config.pipe_horizontal_space.value
-        for (var i = 0; i < this.pipe_number ; i++) {
-            var p1 = this.pipes[i * 2]
-            var p2 = this.pipes[i * 2 + 1]
-            p1.x += s
-            p2.x += s
-            if(p1.x < -space) {
-                    // if (i === 0) {
-                    //     old_space = this.pipe_horizontal_space
-                    // }
-                    // if (old_space !== space && i !== 0) {
-                    //     var space_minus = space - old_space
-                    //     p1.x += this.pipe_number * space + space_minus
-                    //     p2.x += th is.pipe_number * space + space_minus
-                    // } else {
-                    p1.x += this.pipe_number * space
-                    p2.x += this.pipe_number * space
-                    // }
-                this.resetPipePosition(p1, p2)
-            }
-        }
-    }
-    draw() {
-        var context = this.game.context
-        for (let o of this.pipes) {
-            context.save()
-            var w2 = o.w / 2
-            var h2 = o.h / 2
-            context.translate(o.x + w2, o.y + h2)
-            var scaleX = o.flipX ? -1 : 1
-            var scaleY = o.flipY ? -1 : 1
-            context.scale(scaleX, scaleY)
-            context.rotate(o.rotation * Math.PI / 180)
-
-            context.translate(-w2, -h2)
-
-            context.drawImage(o.texture, 0, 0)
-            context.restore()
-        }
-    }
-}
-
 class Grounds{
     constructor(game) {
         this.game = game
@@ -140,64 +37,6 @@ class Grounds{
     }
 }
 
-class Bird extends GuaAnimation{
-    constructor(game) {
-        super(game)
-        this.setup()
-        this.setupInputs()
-    }
-    setup() {
-        super.setup()
-        // 重力和加速度
-        this.gy = 10
-        this.vy = 0
-        this.rotation = 0
-    }
-    setupInputs() {
-        super.setupInputs()
-        var game = this.game
-        var self = this
-        game.registerAction('j', function(){
-            // log('jump')
-            self.jump()
-        })
-    }
-    update() {
-        this.y += this.vy
-        this.vy += this.gy * 0.1
-        var h = 230
-        if (this.y > h) {
-            this.y = h
-        }
-        // 更新角度
-        if (this.rotation < 45) {
-            this.rotation += 5
-        }
-        super.update()
-    }
-    jump() {
-        this.vy = -5
-        this.rotation = -45
-    }
-    draw() {
-        // super.draw();
-        var context = this.game.context
-        context.save()
-        var w2 = this.w / 2
-        var h2 = this.h / 2
-        context.translate(this.x + w2, this.y + h2)
-        if (this.flipX) {
-            context.scale(-1, 1)
-        }
-        context.rotate(this.rotation * Math.PI / 180)
-
-        context.translate(-w2, -h2)
-
-        context.drawImage(this.texture, 0, 0)
-        context.restore()
-    }
-}
-
 
 class SceneTitle extends GuaScene {
     constructor(game) {
@@ -222,6 +61,10 @@ class SceneTitle extends GuaScene {
         var ground = Grounds.new(game)
         this.addElement(ground)
 
+        var mario = GuaNesSprite.new(game)
+        mario.x = 100
+        mario.y = 100
+        this.addElement(mario)
         // var b = Mario.new(game)
         // b.x = 100
         // b.y = 100

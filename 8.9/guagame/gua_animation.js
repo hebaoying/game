@@ -46,7 +46,6 @@ class GuaAnimation {
             self.move(self.speed, keyStatus)
             // self.move()
         })
-
     }
     draw() {
         var context = this.game.context

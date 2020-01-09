@@ -34,15 +34,19 @@ var bindAll = function (selector, eventName, callback) {
         })
     }
 }
-// const bindAll = function(sel, eventName, callback) {
-//     var l = es(sel)
-//     for (var i = 0; i < l.length; i++) {
-//         var tag = l[i]
-//         tag.addEventListener(eventName, function (event) {
-//             callback(event)
-//         })
-//     }
-// }
+
+const __ajax = function (request) {
+    let r = new XMLHttpRequest()
+    r.open('GET', request.url, true)
+    r.responseType = 'arraybuffer'
+    r.onreadystatechange = event => {
+        if (r.readyState == 4) {
+            request.callback(r.response)
+        }
+    }
+    r.send()
+}
+
 const randomBetween = function(start, end) {
     var n = Math.random()
     var r = end - start

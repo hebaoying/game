@@ -36,14 +36,23 @@ var __main = function() {
         b2: 'img/bird/b2.png',
         b3: 'img/bird/b3.png',
     }
-    var game = GuaGame.instance(30, images, function(g){
-        // var s = Scene.new(g)
-        var s = SceneTitle.new(g)
-        g.runWithScene(s)
-    })
+    var request = {
+        url: 'mario.nes',
+        callback(r) {
+            window.bytesArray = new Uint8Array(r)
+            var game = GuaGame.instance(30, images, function(g){
+                // var s = Scene.new(g)
+                var s = SceneTitle.new(g)
+                g.runWithScene(s)
+            })
 
-    enableDebug = true
-    // enableDebugMode(game, true)
+            enableDebug = true
+
+            // enableDebugMode(game, true)
+        }
+    }
+    __ajax(request)
+
 }
 
 __main()

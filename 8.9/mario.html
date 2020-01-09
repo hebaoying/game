@@ -39,9 +39,9 @@
                 let c2 = (p2 >> (7 - j)) & 0b00000001
                 let pixel = (c2 << 1) + c1
                 let color = colors[pixel]
-                if (color == 'white') {
-                    continue
-                }
+                // if (color == 'white') {
+                //     continue
+                // }
                 context.fillStyle = color
                 let px = x + j * w
                 let py = y + i * h
@@ -69,27 +69,6 @@
             }
         }
     }
-    const drawSprite = function (offset) {
-        // 78 69
-        // 0100 1110      0100 0101
-        let canvas = e('#id-canvas-sprite')
-        let context = canvas.getContext('2d')
-
-        let pixelSize = 8
-        let pixelWidth = 5
-        // let offset = window.offset
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 2; j++) {
-                let x = j * pixelSize * pixelWidth
-                let y = i * pixelSize * pixelWidth
-                let pixels = window.bytesArray.slice(offset)
-                // let pixels = bytesArray
-                // let index = window.offset + (i * 8 + j) * numbrOfBytesPerBlock
-                drawBlock(context, pixels, x, y, pixelWidth)
-                offset += 16
-            }
-        }
-    }
     const actions = {
         change_offset(offset) {
             window.offset += offset
@@ -103,18 +82,42 @@
             let offset = event.target.dataset.offset
             offset = Number(offset)
             actions[action] && actions[action](offset)
-
+        })
+        window.addEventListener('keydown', event => {
+            if (event.key == 'p') {
+                window.paused = !window.paused
+            }
         })
     }
+    const drawSprite = function (data) {
+        let canvas = e('#id-canvas-sprite')
+        let context = canvas.getContext('2d')
+
+        let pixelSize = 8
+        let pixelWidth = 3
+        let blockSize = pixelSize * pixelWidth
+        let offset = 0
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 2; j++) {
+                let x = j * blockSize
+                let y = i * blockSize
+                let pixels = data.slice(offset)
+                // let pixels = bytesArray
+                // let index = window.offset + (i * 8 + j) * numbrOfBytesPerBlock
+                drawBlock(context, pixels, x, y, pixelWidth)
+                offset += 16
+            }
+        }
+    }
     const __main = function () {
+        window.paused = false
         window.offset = 32784
         let tileOffset = 32784
         var request = {
             url: 'mario.nes',
             callback(r) {
-                // log(r)
                 window.bytesArray = new Uint8Array(r)
-                log('r:', bytesArray)
+                // log('r:', bytesArray)
                 drawNes(window.bytesArray)
                 //
                 let step = 0
@@ -123,9 +126,11 @@
                 let bytesPerSprite = bytesPerBlock * tilesPerSprite
                 setInterval(function () {
                     let offset = tileOffset + step * bytesPerSprite
-                    drawSprite(offset)
-                    step++
-                    step %= 4
+                    drawSprite(bytesArray.slice(offset))
+                    if (!window.paused) {
+                        step++
+                        step %= 3
+                    }
                 }, 200)
             }
         }
