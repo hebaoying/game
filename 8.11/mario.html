@@ -11,8 +11,10 @@
 </head>
 <body>
 <h2 class="offset"></h2>
-    <canvas id="id-canvas" width="640" height="640"></canvas>
-    <canvas id="id-canvas-sprite" width="160" height="320"></canvas>
+    <canvas id="id-canvas" width="640" height="640" data-action="draw_tile" data-type="source"></canvas>
+    <canvas data-action="draw_tile" width="160" height="320" data-type="tile"></canvas>
+    <canvas data-action="draw_tile" width="160" height="160" data-type="tile"></canvas>
+    <canvas data-action="draw_tile" width="320" height="320" data-type ="tile"></canvas>
     <div class="gua-controls">
         <button data-offset="64" data-action="change_offset">64</button>
         <button data-offset="-64" data-action="change_offset">-64</button>
@@ -44,9 +46,9 @@
                 let c2 = (p2 >> (7 - j)) & 0b00000001
                 let pixel = (c2 << 1) + c1
                 let color = colors[pixel]
-                // if (color == 'white') {
-                //     continue
-                // }
+                if (color == 'white') {
+                    continue
+                }
                 context.fillStyle = color
                 let px = x + j * w
                 let py = y + i * h
@@ -60,6 +62,8 @@
         // 0100 1110      0100 0101
         let canvas = e('#id-canvas')
         let context = canvas.getContext('2d')
+        context.clearRect(0, 0, canvas.width, canvas.height)
+
 
         let blockSize = 8
         let pixelSize = 8
@@ -75,37 +79,63 @@
         }
     }
     const actions = {
-        change_offset(offset) {
+        change_offset(event) {
+            let offset = event.target.dataset.offset
+            offset = Number(offset)
             window.offset += offset
             e('h2').innerHTML = window.offset
             drawNes(window.bytesArray)
-        }
+        },
+        draw_tile(event) {
+            let target = event.target
+            let rect = target.getBoundingClientRect()
+            let x = event.clientX - rect.left
+            let y = event.clientY - rect.top
+            let i = Math.floor(x / 80)
+            let j = Math.floor(y / 80)
+            let bytesPerBlock = 16
+            //
+            let type = target.dataset.type
+
+            if (type == 'source') {
+                let offset = i * bytesPerBlock + bytesPerBlock * 8 * j
+                window.tileOffset = offset + window.offset
+                log('draw_tile', x, y, i, j)
+            } else if (type == 'tile') {
+                let data = window.bytesArray.slice(window.tileOffset)
+                drawSprite(data, target, i, j, 1, 1)
+            }
+        },
     }
     const bindControls = function () {
-        e('.gua-controls').addEventListener('click', function (event) {
+        e('body').addEventListener('click', function (event) {
+            let action = event.target.dataset.action
+            actions[action] && actions[action](event)
+        })
+        window.addEventListener('keydown', event => {
             let action = event.target.dataset.action
             let offset = event.target.dataset.offset
             offset = Number(offset)
             actions[action] && actions[action](offset)
         })
-        window.addEventListener('keydown', event => {
-            if (event.key == 'p') {
-                window.paused = !window.paused
-            }
-        })
+        // bindAll('canvas', 'click', event => {
+        //     // log(event)
+        //     let action = event.target.dataset.action
+        //     actions[action] && actions[action](event)
+        // })
     }
-    const drawSprite = function (data) {
-        let canvas = e('#id-canvas-sprite')
+    const drawSprite = function (data, canvas, offsetX, offsetY, w, h) {
+        // let canvas = e('#id-canvas-sprite')
         let context = canvas.getContext('2d')
 
         let pixelSize = 8
-        let pixelWidth = 3
+        let pixelWidth = 10
         let blockSize = pixelSize * pixelWidth
         let offset = 0
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 2; j++) {
-                let x = j * blockSize
-                let y = i * blockSize
+        for (let i = 0; i < h; i++) {
+            for (let j = 0; j < w; j++) {
+                let x = (offsetX + j) * blockSize
+                let y = (offsetY + i) * blockSize
                 let pixels = data.slice(offset)
                 // let pixels = bytesArray
                 // let index = window.offset + (i * 8 + j) * numbrOfBytesPerBlock
@@ -129,14 +159,14 @@
                 let bytesPerBlock = 16
                 let tilesPerSprite = 8
                 let bytesPerSprite = bytesPerBlock * tilesPerSprite
-                setInterval(function () {
-                    let offset = tileOffset + step * bytesPerSprite
-                    drawSprite(bytesArray.slice(offset))
-                    if (!window.paused) {
-                        step++
-                        step %= 3
-                    }
-                }, 200)
+                // setInterval(function () {
+                //     let offset = tileOffset + step * bytesPerSprite
+                //     drawSprite(bytesArray.slice(tileOffset))
+                //     if (!window.paused) {
+                //         step++
+                //         step %= 3
+                //     }
+                // }, 200)
             }
         }
         __ajax(request)
