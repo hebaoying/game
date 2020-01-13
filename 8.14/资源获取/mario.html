@@ -13,13 +13,14 @@
 <h2 class="offset"></h2>
     <canvas id="id-canvas" width="640" height="640" data-action="draw_tile" data-type="source"></canvas>
     <canvas data-action="draw_tile" width="160" height="320" data-type="tile"></canvas>
-    <canvas data-action="draw_tile" width="160" height="160" data-type="tile"></canvas>
+    <canvas data-action="draw_tile" width="160" height="160" data-type="tile" id="id-canvas-sprite"></canvas>
     <canvas data-action="draw_tile" width="320" height="320" data-type ="tile"></canvas>
     <div class="gua-controls">
         <button data-offset="64" data-action="change_offset">64</button>
         <button data-offset="-64" data-action="change_offset">-64</button>
         <button data-offset="1024" data-action="change_offset">1024</button>
         <button data-offset="-1024" data-action="change_offset">-1024</button>
+        <button data-canvas="#id-canvas-sprite" data-action="clear_canvas">清除画板</button>
     </div>
     <div class="config-div"></div>
     <script src="utils.js"></script>
@@ -79,6 +80,13 @@
         }
     }
     const actions = {
+        clear_canvas(event) {
+            let target = event.target
+            let sel = target.dataset.canvas
+            let canvas = e(sel)
+            let context = canvas.getContext('2d')
+            context.clearRect(0, 0, canvas.width, canvas.height)
+        },
         change_offset(event) {
             let offset = event.target.dataset.offset
             offset = Number(offset)
