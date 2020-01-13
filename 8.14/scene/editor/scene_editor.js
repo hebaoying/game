@@ -1,4 +1,4 @@
-class GuaTiles {
+class GuaEditor {
     constructor(game) {
         this.game = game
         this.setup()
