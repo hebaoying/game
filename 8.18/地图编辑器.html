@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>guario</title>
+    <style>
+        canvas {
+            border: lightskyblue 1px dashed;
+        }
+        img {
+            border: lightskyblue 1px dashed;
+        }
+    </style>
+</head>
+<body>
+<h2 class="offset"></h2>
+    <canvas id="id-canvas-map"
+            data-action="draw_tile"
+            width="512"
+            height="480"
+            data-type="tile"></canvas>
+    <div>
+        <img src="img/tile/1.png" data-type="source" data-action="draw_tile" data-tile="1">
+        <img src="img/tile/2.png" data-type="source" data-action="draw_tile" data-tile="2">
+        <img src="img/tile/3.png" data-type="source" data-action="draw_tile" data-tile="3">
+        <img src="img/tile/4.png" data-type="source" data-action="draw_tile" data-tile="4">
+    </div>
+    <div class="gua-controls">
+        <button data-canvas="#id-canvas-map" data-action="clear_canvas">清除画板</button>
+        <button data-action="export_map">输出json</button>
+    </div>
+    <div class="config-div"></div>
+    <script src="config.js"></script>
+
+    <script>
+    const log = console.log.bind(console)
+    const e = sel => document.querySelector(sel)
+
+    const colors = [
+        'white',
+        '#fe1000',
+        '#ffb010',
+        '#aa3030',
+    ]
+    const __ajax = function (request) {
+        let r = new XMLHttpRequest()
+        r.open('GET', request.url, true)
+        r.responseType = 'arraybuffer'
+        r.onreadystatechange = event => {
+            if (r.readyState == 4) {
+                request.callback(r.response)
+            }
+        }
+        r.send()
+    }
+
+    const drawTile = function (event) {
+        if (window.activeTile == null || !window.drawing) {
+            return
+        }
+        // 画地图
+        window.map.setupTile(event)
+
+        context = window.context
+        let [x, y] = positionFromTile(event)
+        context.fillRect(x, y, window.tileSize, window.tileSize)
+        context.drawImage(window.activeTile, x, y)
+    }
+
+    const positionFromTile = function (event) {
+        let target = event.target
+        let rect = target.getBoundingClientRect()
+        let x = event.clientX - rect.left
+        let y = event.clientY - rect.top
+        let tileSize = window.tileSize
+        let i = Math.floor(x / tileSize)
+        let j = Math.floor(y / tileSize)
+        let x1 = i * tileSize
+        let y1 = j * tileSize
+        return [x1, y1]
+    }
+    const actions = {
+        clear_canvas(event) {
+            let target = event.target
+            let sel = target.dataset.canvas
+            let canvas = e(sel)
+            let context = canvas.getContext('2d')
+            context.clearRect(0, 0, canvas.width, canvas.height)
+        },
+        change_offset(event) {
+            let offset = event.target.dataset.offset
+            offset = Number(offset)
+            window.offset += offset
+            e('h2').innerHTML = window.offset
+            drawNes(window.bytesArray)
+        },
+        draw_tile(event) {
+            let target = event.target
+            //
+            let type = event.target.dataset.type
+            if (type == 'source') {
+                window.activeTile = target
+                // let bytesPerBlock = 16
+            } else if (type == 'tile') {
+                drawTile(event)
+            }
+        },
+        export_map(event) {
+            window.map.exportJSON()
+        },
+    }
+
+    const bindControls = function () {
+        e('body').addEventListener('click', function (event) {
+            let action = event.target.dataset.action
+            actions[action] && actions[action](event)
+        })
+        canvas.addEventListener('mousedown', event => {
+            window.drawing = true
+        })
+        canvas.addEventListener('mousemove', event => {
+            drawTile(event)
+        })
+        canvas.addEventListener('mouseup', event => {
+            window.drawing = false
+        })
+    }
+
+    const init = function () {
+        window.map = Map.new()
+        window.drawing = false
+        window.tileSize = 32
+        window.activeTile = null
+        window.canvas = e('#id-canvas-map')
+        window.context = window.canvas.getContext('2d')
+        window.context.fillStyle = '#5080ff'
+        window.context.fillRect(0, 0, canvas.width, canvas.height)
+    }
+
+    class Map {
+        constructor() {
+            this.tiles = []
+            this.init()
+        }
+        static new(game) {
+            var i = new this(game)
+            return i
+        }
+        init() {
+            this.height = 15
+            this.width = 16
+            this.size = this.height * this.width
+            for (let i = 0; i < this.size; i++) {
+                this.tiles.push(0)
+            }
+            log(this.tiles.length, 'ihdu')
+        }
+        setupTile(event) {
+            let tileId = Number(window.activeTile.dataset.tile)
+            // log('tile id', tileId)
+            let [x, y] = positionFromTile(event)
+            x = x / window.tileSize
+            y = y / window.tileSize
+            let index = x * this.height + y
+            this.tiles[index] = tileId
+            // log('index', index, tileId)
+        }
+        exportJSON() {
+            let result = JSON.stringify(this.tiles)
+            log(result)
+            return result
+        }
+    }
+    const __main = function () {
+        init()
+        
+        bindControls()
+    }
+    __main()
+
+</script>
+</body>
+
+</html>
