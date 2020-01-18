@@ -1,11 +1,12 @@
 class GuaNesSprite {
-    constructor(game) {
+    constructor(game, map) {
         this.game = game
+        this.map = map
         this.setup()
         this.setupInputs()
     }
-    static new(game) {
-        var i = new this(game)
+    static new(...args) {
+        var i = new this(...args)
         return i
     }
     setup() {
@@ -85,21 +86,31 @@ class GuaNesSprite {
             this.x += this.vx
         }
         // 更新受力, y轴
-        this.y += this.vy
-        this.x + this.vx
-        this.vy += this.gy * 0.1
-        var h = 100
-        if (this.y > h) {
-            this.y = h
-        }
-        // if (enableDebug) {
-        //     this.debug()
-        // }
+        this.updateGravity()
         this.frameCount--
         if (this.frameCount == 0) {
             this.frameCount = 3
             this.frameIndex++
             this.frameIndex %= 3
+        }
+
+    }
+    updateGravity() {
+        // 拿到角色在地图中的坐标 i j
+        this.tileSize = this.map.tileSize
+        let i = Math.floor(this.x / this.tileSize)
+        // 需要算脚, + 2
+        let j = Math.floor(this.y / this.tileSize) + 2
+        let onTheGround = this.map.onTheGround(i, j)
+        if (onTheGround) {
+            this.vy = 0
+        } else {
+            this.y += this.vy
+            this.vy += this.gy * 0.1
+            // var h = 100
+            // if (this.y > h) {
+            //     this.y = h
+            // }
         }
 
     }

@@ -47,7 +47,7 @@ var __main = function() {
             var game = GuaGame.instance(30, images, function(g){
                 // var s = Scene.new(g)
                 // var s = SceneTitle.new(g)
-                var s = GuaEditor.new(g)
+                var s = SceneEditor.new(g)
                 g.runWithScene(s)
             })
 
