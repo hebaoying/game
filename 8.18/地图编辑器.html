@@ -119,7 +119,9 @@
             window.drawing = true
         })
         canvas.addEventListener('mousemove', event => {
-            drawTile(event)
+            if (window.drawing) {
+                drawTile(event)
+            }
         })
         canvas.addEventListener('mouseup', event => {
             window.drawing = false

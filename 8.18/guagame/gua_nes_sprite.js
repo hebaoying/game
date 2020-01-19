@@ -13,7 +13,7 @@ class GuaNesSprite {
         this.tileOffset = 32784
         this.data = window.bytesArray.slice(this.tileOffset)
 
-        this.pixelWidth = 1.5
+        this.pixelWidth = 2
         this.rowsOfSprite = 4
         this.columnsOfSprite = 2
         // 为了省事, 在这里hard code一套动画
@@ -34,6 +34,8 @@ class GuaNesSprite {
         // 摩擦和加速 , x轴
         this.vx = 0
         this.mx = 0
+        this.maxSpeed = 10
+        //
     }
     setupInputs() {
         var self = this
@@ -78,6 +80,10 @@ class GuaNesSprite {
     update() {
         // 更新受力, x轴
         this.vx += this.mx
+        // 限制最大速度
+        if (Math.abs(this.vx) >= this.maxSpeed) {
+            this.vx = parseInt(this.vx)
+        }
         // 说明方向是相反的
         if (this.vx * this.mx > 0) {
             this.vx = 0
@@ -102,15 +108,17 @@ class GuaNesSprite {
         // 需要算脚, + 2
         let j = Math.floor(this.y / this.tileSize) + 2
         let onTheGround = this.map.onTheGround(i, j)
-        if (onTheGround) {
+        if (onTheGround && this.vy > 0) {
             this.vy = 0
         } else {
             this.y += this.vy
             this.vy += this.gy * 0.1
-            // var h = 100
-            // if (this.y > h) {
-            //     this.y = h
-            // }
+            // 如果陷入地面, 重置 y 位置
+            let j = Math.floor(this.y / this.tileSize) + 1
+            let onTheGround = this.map.onTheGround(i, j)
+            if (onTheGround) {
+                this.y = (j - 2) * this.tileSize
+            }
         }
 
     }
