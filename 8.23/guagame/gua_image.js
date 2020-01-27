@@ -36,9 +36,13 @@ class GuaImage {
     center() {
         let x = this.x + this.w / 2
         let y = this.y + this.h / 2
-        return {x, y}
+        return GuaVector.new(x, y)
     }
-    distance() {
-
-    }
+    // distance(vector) {
+    //     log('vector', vector)
+    //     let v = vector
+    //     let dx = v.x - this.x
+    //     let dy = v.y - this.y
+    //     return Math.sqrt(dx * dx + dy * dy)
+    // }
 }

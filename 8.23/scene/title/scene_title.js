@@ -25,6 +25,8 @@ class SceneTitle extends GuaScene {
         e2.y = 150
         this.addElement(e2)
         this.elements.push(e2)
+        this.enemies.push(e1)
+        this.enemies.push(e2)
     }
     setupHUD() {
         let gun = GuaImage.new(this.game, 'gun')
@@ -35,8 +37,9 @@ class SceneTitle extends GuaScene {
     setupTower() {
         let t1 = Tower.new(this.game)
         this.t1 = t1
-        t1.x = 300
-        t1.y = 250
+        t1.x = 100
+        t1.y = 150
+        self.gun = t1
         this.addElement(t1)
         this.towers.push(t1)
     }
@@ -73,8 +76,15 @@ class SceneTitle extends GuaScene {
         super.update()
         // tower search enemy
         for (let t of this.towers) {
-            if (t.target === null) {
+            if (t.target == null) {
                 t.findTarget(this.enemies)
+            }
+        }
+        for (let e of this.enemies) {
+            if (!e.alive) {
+                this.enemies = this.enemies.filter(e => e.alive)
+                // log('this.enemies', this.enemies)
+                // this.removeElement(e)
             }
         }
     }

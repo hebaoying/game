@@ -103,19 +103,47 @@ class Tower extends GuaImage{
     }
     setup() {
         this.attack = 1
-        this.range = 50
+        this.range = 100
         this.target = null
     }
     update() {
-        // this.x += this.speed
-        if (this.target !== null) {
+        // if (this.target !== null) {
+        if (this.canAttack(this.target)) {
             log('攻击敌人')
+            this.hit(this.target)
+            if (!this.target.alive) {
+                this.clearTarget()
+            }
         }
+    }
+    canAttack(enemy) {
+        let e = enemy
+        let enemyExist = e !== null
+        if (enemyExist) {
+            let c = this.center()
+            let ec = enemy.center()
+            let distance = c.distance(ec)
+            // log('can attach******', distance < this.range, distance, this.range)
+            return distance < this.range
+        }
+
     }
     findTarget(enemies) {
         for (let e of enemies) {
-
+            // log('find target*******', this.canAttack(e))
+            if (this.canAttack(e)) {
+                this.target = e
+                break
+            } else {
+                this.clearTarget()
+            }
         }
+    }
+    clearTarget() {
+        this.target = null
+    }
+    hit(target) {
+        target.hurt(this.attack)
     }
 }
 
@@ -133,9 +161,19 @@ class Enemy extends GuaImage{
         this.destination = 500
     }
     update() {
-        // this.x += this.speed
+        this.x += this.speed
         if (this.x > this.destination) {
             log('敌人已经到达')
+        }
+    }
+    die() {
+        this.alive = false
+        this.scene.removeElement(this)
+    }
+    hurt(ap) {
+        this.hp -= ap
+        if (this.hp <= 0) {
+            this.die()
         }
     }
 }
