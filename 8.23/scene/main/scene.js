@@ -110,7 +110,7 @@ class Tower extends GuaImage{
         // if (this.target !== null) {
         if (this.canAttack(this.target)) {
             log('攻击敌人')
-            this.hit(this.target)
+            this.fire(this.target)
             if (!this.target.alive) {
                 this.clearTarget()
             }
@@ -142,7 +142,7 @@ class Tower extends GuaImage{
     clearTarget() {
         this.target = null
     }
-    hit(target) {
+    fire(target) {
         target.hurt(this.attack)
     }
 }
