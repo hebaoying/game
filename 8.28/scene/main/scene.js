@@ -33,8 +33,8 @@ class Tower extends GuaImage{
             let c = this.center()
             let ec = enemy.center()
             let distance = c.distance(ec)
-            let inAttachRange = distance < this.range
-            return inAttachRange
+            let inAttackRange = distance < this.range
+            return inAttackRange
         }
     }
     findTarget(enemies) {
