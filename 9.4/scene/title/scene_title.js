@@ -10,6 +10,8 @@ class SceneTitle extends GuaScene {
         // 初始化属性
         this.enemies = []
         this.towers = []
+        this.debugPath = []
+        this.count = 0
         this.setupBg()
         this.setupHUD()
         this.setupElements()
@@ -25,6 +27,7 @@ class SceneTitle extends GuaScene {
         let e = Enemy.new(this.game)
         e.x = x
         e.y = y
+        e.towerSize = this.towerSize
         this.addElement(e)
         this.elements.push(e)
         this.enemies.push(e)
@@ -65,7 +68,7 @@ class SceneTitle extends GuaScene {
         //
         this.towers.push(t1)
         //
-        this.findPathForEnemies()
+        // this.findPathForEnemies()
     }
     findPathForEnemies() {
         // 为每一个敌人单独寻路
@@ -76,8 +79,10 @@ class SceneTitle extends GuaScene {
             let i = Math.floor(x / towerSize)
             let j = Math.floor(y / towerSize)
             let path = this.map.pathFinding(i, j)
-            log('path', path)
+            // log('path', path)
             e.resetPath(path)
+            // debug path temp
+            this.debugPath = path
         }
     }
     setupTower() {
@@ -124,6 +129,14 @@ class SceneTitle extends GuaScene {
     }
     draw() {
         super.draw()
+        let s = this.towerSize
+        let context = this.game.context
+        for (let p of this.debugPath) {
+            context.fillStyle = 'rgba(200, 200, 200, 0.5'
+            let x = p.x * s
+            let y = p.y * s
+            context.fillRect(x, y, s, s)
+        }
     }
     update() {
         super.update()
@@ -139,6 +152,13 @@ class SceneTitle extends GuaScene {
                 // log('this.enemies', this.enemies)
                 // this.removeElement(e)
             }
+        }
+        this.findPathForEnemies()
+        // add enemy
+        this.count++
+        if (this.count > 60) {
+            this.count = 0
+            this.addEnemy(0, 0)
         }
     }
 }

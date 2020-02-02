@@ -134,6 +134,9 @@ class Enemy extends GuaImage{
     }
     update() {
         this.x += this.speed
+        if (this.steps.length === 0) {
+            return
+        }
         let [dx, dy] = this.steps[this.stepIndex]
         let signX = this.sign(dx, this.x)
         let signY = this.sign(dy, this.y)
