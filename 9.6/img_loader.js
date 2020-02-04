@@ -1,19 +1,21 @@
 class imgLoader {
-    constructor(game=null) {
+    constructor(game, config=null) {
         this.game = game
-        this.config = {
-            zombie: {
-                actions: [
-                    {
-                        name: 'attack',
-                        number: 11,
-                    },
-                    {
-                        name: 'walk',
-                        number: 15,
-                    }
-                ],
-            },
+        if (config === null) {
+            this.config = {
+                zombie: {
+                    actions: [
+                        {
+                            name: 'attack',
+                            number: 11,
+                        },
+                        {
+                            name: 'walk',
+                            number: 15,
+                        }
+                    ],
+                },
+            }
         }
         this.animationNames = []
     }

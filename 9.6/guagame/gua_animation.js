@@ -1,6 +1,7 @@
 class GuaAnimation {
-    constructor(game) {
+    constructor(game, config) {
         this.game = game
+        this.config = config
         this.setup()
         this.setupInputs()
     }
@@ -12,22 +13,7 @@ class GuaAnimation {
         return this.animations[this.animationName]
     }
     setup() {
-        // 为了省事, 在这里hard code一套动画
-        this.animations = {
-            mario: [],
-            // bird: [],
-            // walk: [],
-            // idle: [],
-            // run: [],
-        }
-        // this.speed = config.player_speed.value
-        // 这里的下标错了, debug 很久
-        // for (let i = 1; i < 4; i++) {
-        //     let name = 'b' + i
-        //     let img = this.game.textureByName(name)
-        //     this.animations.bird.push(img)
-        // }
-        let loader = imgLoader.new(this.game)
+        let loader = imgLoader.new(this.game, this.config)
         this.animations = loader.animations()
         // this.animationName = 'zombieattack'
         this.animationName = 'zombiewalk'
