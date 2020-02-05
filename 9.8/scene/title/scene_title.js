@@ -9,7 +9,7 @@ class SceneTitle extends GuaScene {
         this.setupPeashooter()
     }
     setupBg() {
-        let bg = GuaImage.new(this.game, 'bgmain0')
+        let bg = GuaImage.new(this.game, 'bg')
         this.addElement(bg)
     }
     setupPeashooter() {

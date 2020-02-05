@@ -1,4 +1,5 @@
 const imgConfig = {
+    // 动画载入
     zombie: {
         actions: [
             {
@@ -19,13 +20,9 @@ const imgConfig = {
             }
         ],
     },
-    bg: {
-        actions: [
-            {
-                name: 'main',
-                type: 'jpg',
-                number: 1,
-            },
-        ],
-    }
+    // 单个图片
+    bg: 'img/bg.jpg',
+    peabullet0: 'img/peabullet0.gif',
+    peabullet1: 'img/peabullet1.gif',
+
 }

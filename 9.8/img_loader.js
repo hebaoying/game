@@ -42,12 +42,18 @@ class imgLoader {
     setup() {
         this.animations = []
         this.animationNames = []
+        // zombieattack0: 'img/zombie/attack/attack_00.png'
         this.images = {}
         this.process()
     }
     process() {
         for (let bigName of this.bigNames) {
-            let actions = this.config[bigName].actions
+            let bigNameValue = this.config[bigName]
+            let actions = bigNameValue.actions
+            if (actions === undefined) {
+                this.images[bigName] = bigNameValue
+                continue
+            }
             // log(actions)
             for (let action of actions) {
                 let smallName = action.name
